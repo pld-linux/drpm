@@ -1,4 +1,3 @@
-# TODO: more rpm5 porting or use rpm.org
 #
 # Conditional build:
 %bcond_without	apidocs		# API documentation
@@ -7,27 +6,29 @@
 Summary:	Library for making, reading and applying deltarpm packages
 Summary(pl.UTF-8):	Biblioteka do tworzenia, odczytu i aplikowania pakietów deltarpm
 Name:		drpm
-Version:	0.3.0
-Release:	0.1
+Version:	0.5.2
+Release:	1
 # drpm_{diff,search}.c are BSD; the rest LGPL v3+
 License:	LGPL v3+ with BSD parts
 Group:		Libraries
 #Source0Download: https://github.com/rpm-software-management/drpm/releases
 Source0:	https://github.com/rpm-software-management/drpm/releases/download/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	e1ca38e14f52d0f5229bba45ba8b8904
+# Source0-md5:	cd8f5fdc13cad7b97ab88f0e44b4bfe0
 Patch0:		%{name}-cmake.patch
-# not enough, drpm uses too many rpm4.6+ APIs
-Patch1:		%{name}-rpm5.patch
 URL:		https://github.com/rpm-software-management/drpm
 BuildRequires:	bzip2-devel
 BuildRequires:	cmake >= 2.8
-BuildRequires:	doxygen
+%{?with_apidocs:BuildRequires:	doxygen}
+# no option to enable
 #BuildRequires:	lzlib-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
-BuildRequires:	rpm-devel
+BuildRequires:	rpm-build >= 4.6
+# which exactly? not specified, but rpm5 is not supported
+BuildRequires:	rpm-devel >= 1:4.16
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
+BuildRequires:	zstd-devel
 %if %{with tests}
 BuildRequires:	cmocka-devel
 BuildRequires:	deltarpm
@@ -68,15 +69,12 @@ Dokumentacja API biblioteki drpm.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 install -d build
 cd build
-CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/rpm"
 %cmake .. \
-	-DINCLUDE_INSTALL_DIR=%{_includedir} \
-	-DLIB_INSTALL_DIR=%{_lib}
+	-DCMAKE_INSTALL_LIBDIR=%{_lib}
 
 %{__make}
 
@@ -91,7 +89,7 @@ ctest
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean

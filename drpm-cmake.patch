@@ -1,23 +1,13 @@
---- drpm-0.3.0/src/CMakeLists.txt.orig	2016-05-04 10:53:56.000000000 +0200
-+++ drpm-0.3.0/src/CMakeLists.txt	2018-05-12 21:55:55.404743698 +0200
-@@ -5,8 +5,6 @@
- set(DRPM_VERSION ${DRPM_VERSION_MAJOR}.${DRPM_VERSION_MINOR}.${DRPM_VERSION_PATCH})
- set(DRPM_SOVERSION ${DRPM_VERSION_MAJOR})
+--- drpm-0.5.2/src/CMakeLists.txt.orig	2023-10-08 09:42:28.374467283 +0200
++++ drpm-0.5.2/src/CMakeLists.txt	2023-10-08 09:42:56.150983471 +0200
+@@ -1,7 +1,5 @@
+ set(DRPM_SOVERSION ${DRPM_MAJOR_VERSION})
  
 -set(CMAKE_BUILD_TYPE RelWithDebInfo)
 -
  if (NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
     set(ARCH_LESS_64BIT 1)
  endif()
-#@@ -14,7 +14,7 @@
-# add_library(drpm SHARED ${DRPM_SOURCES})
-# 
-# set_source_files_properties(${DRPM_SOURCES} PROPERTIES
-#-   COMPILE_FLAGS "-std=c99 -pedantic -Wall -Wextra -DHAVE_CONFIG_H -I${CMAKE_BINARY_DIR}"
-#+   COMPILE_FLAGS "${CFLAGS} ${CPPFLAGS} -std=c99 -pedantic -Wall -Wextra -DHAVE_CONFIG_H -I${CMAKE_BINARY_DIR}"
-# )
-# 
-# target_link_libraries(drpm ${DRPM_LINK_LIBRARIES})
 --- drpm-0.3.0/test/CMakeLists.txt.orig	2016-05-12 17:12:05.000000000 +0200
 +++ drpm-0.3.0/test/CMakeLists.txt	2018-05-12 22:06:03.454736755 +0200
 @@ -12,8 +12,6 @@
@@ -29,12 +19,3 @@
  file(
     COPY ${DRPM_TEST_FILES}
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-#@@ -33,7 +31,7 @@
-# add_executable(drpm_api_tests ${DRPM_TEST_SOURCES})
-# 
-# set_source_files_properties(${DRPM_TEST_SOURCES} PROPERTIES
-#-   COMPILE_FLAGS "-std=c99 -pedantic -Wall -Wextra -DHAVE_CONFIG_H -I${CMAKE_BINARY_DIR}"
-#+   COMPILE_FLAGS "${CFLAGS} ${CPPFLAGS} -std=c99 -pedantic -Wall -Wextra -DHAVE_CONFIG_H -I${CMAKE_BINARY_DIR}"
-# )
-# 
-# target_link_libraries(drpm_api_tests ${DRPM_LINK_LIBRARIES} ${CMOCKA_LIBRARIES})
