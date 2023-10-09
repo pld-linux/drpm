@@ -32,6 +32,7 @@ BuildRequires:	zstd-devel
 %if %{with tests}
 BuildRequires:	cmocka-devel
 BuildRequires:	deltarpm
+BuildRequires:	glibc-debuginfo
 BuildRequires:	valgrind
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
