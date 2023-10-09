@@ -2,12 +2,17 @@
 # Conditional build:
 %bcond_without	apidocs		# API documentation
 %bcond_without	tests		# tests
+%bcond_without	valgrind	# valgrind tests
 #
+# valgrind archs without x32 (x32 valgrind is actually x86_64)
+%ifnarch %{ix86} %{x8664} %{armv7} ppc ppc64 s390x aarch64
+%undefine	with_valgrind
+%endif
 Summary:	Library for making, reading and applying deltarpm packages
 Summary(pl.UTF-8):	Biblioteka do tworzenia, odczytu i aplikowania pakietów deltarpm
 Name:		drpm
 Version:	0.5.2
-Release:	1
+Release:	2
 # drpm_{diff,search}.c are BSD; the rest LGPL v3+
 License:	LGPL v3+ with BSD parts
 Group:		Libraries
@@ -32,8 +37,10 @@ BuildRequires:	zstd-devel
 %if %{with tests}
 BuildRequires:	cmocka-devel
 BuildRequires:	deltarpm
+%if %{with valgrind}
 BuildRequires:	glibc-debuginfo
 BuildRequires:	valgrind
+%endif
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -80,7 +87,8 @@ cd build
 %{__make}
 
 %if %{with tests}
-ctest
+ctest \
+	%{!?with_valgrind:-E drpm_memcheck}
 %endif
 
 %if %{with apidocs}
