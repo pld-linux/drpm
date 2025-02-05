@@ -12,7 +12,7 @@ Summary:	Library for making, reading and applying deltarpm packages
 Summary(pl.UTF-8):	Biblioteka do tworzenia, odczytu i aplikowania pakietów deltarpm
 Name:		drpm
 Version:	0.5.2
-Release:	2
+Release:	3
 # drpm_{diff,search}.c are BSD; the rest LGPL v3+
 License:	LGPL v3+ with BSD parts
 Group:		Libraries
@@ -76,7 +76,7 @@ Dokumentacja API biblioteki drpm.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P 0 -p1
 
 %build
 install -d build
