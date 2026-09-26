@@ -11,18 +11,18 @@
 Summary:	Library for making, reading and applying deltarpm packages
 Summary(pl.UTF-8):	Biblioteka do tworzenia, odczytu i aplikowania pakietów deltarpm
 Name:		drpm
-Version:	0.5.2
-Release:	4
+Version:	0.5.3
+Release:	1
 # drpm_{diff,search}.c are BSD; the rest LGPL v3+
 License:	LGPL v3+ with BSD parts
 Group:		Libraries
 #Source0Download: https://github.com/rpm-software-management/drpm/releases
-Source0:	https://github.com/rpm-software-management/drpm/releases/download/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	cd8f5fdc13cad7b97ab88f0e44b4bfe0
+Source0:	https://github.com/rpm-software-management/drpm/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	5b917b66ed242fc517f077ab9db7aa9a
 Patch0:		%{name}-cmake.patch
 URL:		https://github.com/rpm-software-management/drpm
 BuildRequires:	bzip2-devel
-BuildRequires:	cmake >= 2.8
+BuildRequires:	cmake >= 3.5
 %{?with_apidocs:BuildRequires:	doxygen}
 # no option to enable
 #BuildRequires:	lzlib-devel
@@ -82,7 +82,8 @@ Dokumentacja API biblioteki drpm.
 install -d build
 cd build
 %cmake .. \
-	-DCMAKE_INSTALL_LIBDIR=%{_lib}
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
+	%{!?with_tests:-DENABLE_TESTS=OFF}
 
 %{__make}
 
@@ -110,12 +111,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc LICENSE.BSD
-%attr(755,root,root) %{_libdir}/libdrpm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libdrpm.so.0
+%{_libdir}/libdrpm.so.*.*.*
+%ghost %{_libdir}/libdrpm.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdrpm.so
+%{_libdir}/libdrpm.so
 %{_includedir}/drpm.h
 %{_pkgconfigdir}/drpm.pc
 
